@@ -22,17 +22,17 @@ export default class App extends Component {
     }
   };
 
-  onclick = () => {
-    if (this.state.selectedNavBar === true) {
-      this.setState({
-        selectedNavBar: false
-      });
-    } else {
-      this.setState({
-        selectedNavBar: true
-      });
-    }
-  };
+  // onclick = () => {
+  //   if (this.state.selectedNavBar === true) {
+  //     this.setState({
+  //       selectedNavBar: false
+  //     });
+  //   } else {
+  //     this.setState({
+  //       selectedNavBar: true
+  //     });
+  //   }
+  // };
 
   render() {
     const head = !this.state.selectedNavBar ? <Header /> : <HeaderUser />;
@@ -40,7 +40,7 @@ export default class App extends Component {
 
     return (
       <div className="wripper">
-        <button onClick={this.onclick}>hed</button>
+        {/* <button onClick={this.onclick}>hed</button> */}
         <Router>
           <div className="stardb-app">
             {head}

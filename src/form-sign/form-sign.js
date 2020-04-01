@@ -37,7 +37,7 @@ class FormSignIN extends Component {
         const articles = res.data;
         console.log("👉 Returned data:", articles);
       })
-      .then(log => {
+      .then(() => {
         if (this.state.password) {
           this.props.selectedNavBar();
         } else {
@@ -45,11 +45,13 @@ class FormSignIN extends Component {
         }
       })
       .then(() => this.props.history.push("/"))
-      // .catch(console.log("error email or password"));
-
-      .catch(function(data) {
-        console.log(data);
+      .catch(error => {
+        // тут обработка ошибки или вывод в консоль
+        console.log(error);
       });
+    // .catch(function(data) {
+    //   console.log(data);
+    // });
   };
 
   render() {
