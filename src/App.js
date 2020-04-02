@@ -11,8 +11,19 @@ import Footer from "./footer/footer";
 
 export default class App extends Component {
   state = {
-    selectedNavBar: false
+    selectedNavBar: false,
+    token: null,
+    user: null
   };
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    this.setState({
+      user: user,
+      token: token
+    });
+  }
 
   selectedNavBar = async () => {
     if (this.state.selectedNavBar === false) {
@@ -22,28 +33,18 @@ export default class App extends Component {
     }
   };
 
-  onclick = () => {
-    if (this.state.selectedNavBar === true) {
-      this.setState({
-        selectedNavBar: false
-      });
-    } else {
-      this.setState({
-        selectedNavBar: true
-      });
-    }
-  };
-
   render() {
-    const head = !this.state.selectedNavBar ? <Header /> : <HeaderUser />;
+    const { user, selectedNavBar } = this.state;
+
+    const contentHeader = user || selectedNavBar ? <HeaderUser /> : <Header />;
+
     const formSign = <FormSign selectedNavBar={this.selectedNavBar} />;
 
     return (
       <div className="wripper">
-        <button onClick={this.onclick}>hed</button>
         <Router>
           <div className="stardb-app">
-            {head}
+            {contentHeader}
             <Route path="/" component={AllList} exact />
             <Route path="/login/" component={FormLogIn} exact />
             <Route path="/register/" render={() => formSign} exact />
