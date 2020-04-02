@@ -6,7 +6,17 @@ class FormSignIN extends Component {
   state = {
     password: null,
     name: null,
-    selectedNavBar: false
+    selectedNavBar: false,
+    errorMesage: {},
+    errorMesageActive: false,
+    user: null,
+    token: null
+  };
+
+  handleFormSubmit = () => {
+    const { user, token } = this.state;
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", user);
   };
 
   onSignPassword = e => {
@@ -25,6 +35,17 @@ class FormSignIN extends Component {
     // console.log("name = " + this.state.name);
   };
 
+  errorMesageRender() {
+    const { errorMesage, errorMesageActive } = this.state;
+    if (errorMesageActive) {
+      console.log(this.state);
+      const erMes = errorMesage;
+
+      const erMes2 = Object.getOwnPropertyNames(erMes);
+      return <p>{erMes2 + ": " + erMes["email or password"]}</p>;
+    }
+  }
+
   onSign = async () => {
     await axios
       .post(`https://conduit.productionready.io/api/users/login`, {
@@ -34,29 +55,38 @@ class FormSignIN extends Component {
         }
       })
       .then(res => {
-        const articles = res.data;
+        const articles = res.data.user;
+        this.setState({
+          token: articles.token,
+          user: articles.username
+        });
+        this.handleFormSubmit();
         console.log("👉 Returned data:", articles);
       })
       .then(() => {
         if (this.state.password) {
           this.props.selectedNavBar();
-        } else {
-          console.log("error email or password!!!!!");
         }
       })
       .then(() => this.props.history.push("/"))
       .catch(error => {
-        // тут обработка ошибки или вывод в консоль
-        console.log(error);
+        const errorMes = error.response.data.errors;
+        this.setState({
+          errorMesage: errorMes,
+          errorMesageActive: true
+        });
+        // console.log(error.response.data.errors);
+        this.errorMesageRender();
       });
-    // .catch(function(data) {
-    //   console.log(data);
-    // });
   };
 
   render() {
+    const { errorMesageActive } = this.state;
+    const errorMesager = this.errorMesageRender();
+    const contentEroor = errorMesageActive ? errorMesager : null;
     return (
       <div>
+        <div>{contentEroor}</div>
         <form
           className=""
           onSubmit={e => {
@@ -64,7 +94,7 @@ class FormSignIN extends Component {
           }}
         >
           <div className="form-group">
-            <label>User name</label>
+            <label>User email</label>
             <input
               type="email"
               className="form-control"
