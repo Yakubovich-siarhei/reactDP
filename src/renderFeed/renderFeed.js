@@ -57,30 +57,30 @@ export default class AllFeedList extends Component {
       <div>
         {articles.map((feed, index) => {
           return (
-            <div className="feed border-top" key={index}>
-              <div>
+            <div className="feed border-top " key={index}>
+              <div className="col-12">
                 <p className="h5">{feed.title}</p>
               </div>
-
-              <div className="align-middle">
-                <button
-                  className="btn btn-sm btn-outline-success float-right"
-                  // onClick={this.onfetchDataFavorite}
-                >
-                  <FavoriteIcon />
-                  {feed.favoritesCount}
-                </button>
-              </div>
-
-              <div>
-                <ul className="list-group">
-                  <li className="list-group-item border-0">
-                    title list: {feed.slug}
-                  </li>
-                  <li className="list-group-item border-0">
-                    name autor: {feed.author.username}
-                  </li>
-                </ul>
+              <div className="col-12 d-flex">
+                <div className="col-10 p-1">
+                  <ul className="list-group">
+                    <li className="list-group-item border-0">
+                      title list: {feed.slug}
+                    </li>
+                    <li className="list-group-item border-0">
+                      name autor: {feed.author.username}
+                    </li>
+                  </ul>
+                </div>
+                <div className="col-2 p-0">
+                  <button
+                    className="btn btn-sm btn-outline-success float-right"
+                    // onClick={this.onfetchDataFavorite}
+                  >
+                    <FavoriteIcon />
+                    {feed.favoritesCount}
+                  </button>
+                </div>
               </div>
             </div>
           );

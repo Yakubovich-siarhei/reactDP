@@ -9,28 +9,45 @@ class FormSignIN extends Component {
     selectedNavBar: false,
     errorMesage: {},
     errorMesageActive: false,
-    user: null,
-    token: null
+    // username: null,
+    // token: null,
+    // email: null,
+    // id:null,
   };
 
   handleFormSubmit = () => {
-    const { user, token } = this.state;
+    const {
+      username,
+      token,
+      email,
+      id,
+      createdAt,
+      updatedAt,
+      bio,
+      image,
+    } = this.state;
     localStorage.setItem("token", token);
-    localStorage.setItem("user", user);
+    localStorage.setItem("username", username);
+    localStorage.setItem("email", email);
+    localStorage.setItem("id", id);
+    localStorage.setItem("createdAt", createdAt);
+    localStorage.setItem("updatedAt", updatedAt);
+    localStorage.setItem("bio", bio);
+    localStorage.setItem("image", image);
   };
 
-  onSignPassword = e => {
+  onSignPassword = (e) => {
     const value = e.target.value;
     this.setState({
-      password: value
+      password: value,
     });
     console.log(this.state.password);
   };
 
-  onSingName = e => {
+  onSingName = (e) => {
     const value = e.target.value;
     this.setState({
-      name: value
+      name: value,
     });
     // console.log("name = " + this.state.name);
   };
@@ -51,15 +68,22 @@ class FormSignIN extends Component {
       .post(`https://conduit.productionready.io/api/users/login`, {
         user: {
           email: this.state.name,
-          password: this.state.password
-        }
+          password: this.state.password,
+        },
       })
-      .then(res => {
+      .then((res) => {
         const articles = res.data.user;
         this.setState({
+          id: articles.id,
+          email: articles.email,
+          createdAt: articles.createdAt,
+          updatedAt: articles.updatedAt,
+          username: articles.username,
+          bio: articles.bio,
+          image: articles.image,
           token: articles.token,
-          user: articles.username
         });
+        console.log(this.state);
         this.handleFormSubmit();
         console.log("👉 Returned data:", articles);
       })
@@ -69,11 +93,11 @@ class FormSignIN extends Component {
         }
       })
       .then(() => this.props.history.push("/"))
-      .catch(error => {
+      .catch((error) => {
         const errorMes = error.response.data.errors;
         this.setState({
           errorMesage: errorMes,
-          errorMesageActive: true
+          errorMesageActive: true,
         });
         // console.log(error.response.data.errors);
         this.errorMesageRender();
@@ -89,7 +113,7 @@ class FormSignIN extends Component {
         <div>{contentEroor}</div>
         <form
           className=""
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
           }}
         >
@@ -102,7 +126,7 @@ class FormSignIN extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Password</label>
+            Password
             <input
               type="text"
               className="form-control"

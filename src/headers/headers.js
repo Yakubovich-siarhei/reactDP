@@ -3,10 +3,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 class Header extends Component {
-  // state = {
-  //   num: null
-  // };
-
   render() {
     const home = (
       <li className="list-group-item bg-transparent border-0">
@@ -32,30 +28,6 @@ class Header extends Component {
       </li>
     );
 
-    // const profileUser = (
-    //   <li className="list-group-item bg-transparent border-0">
-    //     <Link to="/profile/user" className="text-light badge badge-dark">
-    //       user
-    //     </Link>
-    //   </li>
-    // );
-
-    // const profileUserSettings = (
-    //   <li className="list-group-item bg-transparent border-0">
-    //     <Link to="/settings" className="text-light badge badge-dark">
-    //       Settings
-    //     </Link>
-    //   </li>
-    // );
-
-    // const userNewArticles = (
-    //   <li className="list-group-item bg-transparent border-0">
-    //     <Link to="/newarticles" className="text-light badge badge-dark">
-    //       New Articles
-    //     </Link>
-    //   </li>
-    // );
-
     const navPanelRegistr = (
       <ul className="list-group list-group-horizontal">
         {home}
@@ -63,17 +35,6 @@ class Header extends Component {
         {signIn}
       </ul>
     );
-
-    // const navPanelUser = (
-    //   <ul className="list-group list-group-horizontal">
-    //     {home}
-    //     {profileUser}
-    //     {profileUserSettings}
-    //     {userNewArticles}
-    //   </ul>
-    // );
-
-    // const content = this.state.num ? navPanelUser : navPanelRegistr;
 
     return (
       <div>
@@ -84,7 +45,9 @@ class Header extends Component {
                 CONDUIT
               </Link>
             </div>
-            <div className="col-9">{navPanelRegistr}</div>
+            <div className="col-9 d-flex justify-content-end">
+              {navPanelRegistr}
+            </div>
           </div>
         </nav>
         <nav className="navbar bg-secondary" style={{ height: "100px" }}></nav>
