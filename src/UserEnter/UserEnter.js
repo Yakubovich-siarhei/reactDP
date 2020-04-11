@@ -2,41 +2,32 @@ import React, { Component } from "react";
 import axios from "axios";
 import Spinner from "../spinner/spinner";
 import "./UserEnter.css";
-// import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class UserEnter extends Component {
-  maxId = 10;
+  user = this.props.match.params.user;
+  username = localStorage.getItem("username");
+  token = localStorage.getItem("token");
+
   state = {
-    // token: null,
-    // username: null,
-    // userName: null,
-    // userImg: null,
     show: false,
     active: "",
-
-    // stateTodo: [this.createTodo("111111"), this.createTodo("22222")],
   };
-
-  // createTodo(items) {
-  //   return {
-  //     items,
-  //     id: this.maxId++,
-  //   };
-  // }
 
   componentDidMount() {
     this.onLoadUser();
-    const token = localStorage.getItem("token");
+
     const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
     this.setState({ username, token });
   }
 
   onLoadUser = async () => {
     // const { username } = this.state;
-    const username = localStorage.getItem("username");
+    // const username = localStorage.getItem("username");
     // const asdas =
     await axios
-      .get(`https://conduit.productionready.io/api/profiles/${username}`)
+      .get(`https://conduit.productionready.io/api/profiles/${this.user}`)
       .then((res) => {
         const userProf = res.data.profile;
         this.setState({
@@ -46,7 +37,7 @@ class UserEnter extends Component {
         console.log(userProf);
       });
     // .then(this.onLoad)
-    //   .catch(this.onPushHistory);
+    // .catch(this.onPushHistory);
     // console.log(asdas);
     // return asdas;
   };
@@ -90,47 +81,65 @@ class UserEnter extends Component {
     console.log("id" + event.target.id);
   };
 
-  onLoadNavBar = () => {
-    const {
-      // show,
-      active,
-      // , stateTodo
-    } = this.state;
+  // onLoadNavBar = () => {
+  //   const {
+  //     // show,
+  //     active,
+  //   } = this.state;
 
-    const arr = [
-      { id: 1, items: "111" },
-      { id: 2, items: "222" },
-    ];
+  //   const arr = [
+  //     { id: 1, items: "111" },
+  //     { id: 2, items: "222" },
+  //   ];
 
-    // let classNames = "p-4";
+  //   // let classNames = "p-4";
 
-    // if (show) {
-    //   classNames += " show";
-    // }
+  //   // if (show) {
+  //   //   classNames += " show";
+  //   // }
 
-    const elements = arr.map((item) => {
-      const { id, items } = item;
-      // const style = {
-      //   color: show ? "rgb(76, 219, 107)" : "black",
-      //   borderBottom: show ? "solid 2px rgb(4, 97, 27)" : "none",
-      // };
-      console.log("inem id = " + id);
-      return (
-        <div
-          key={id}
-          id={id}
-          className={
-            "bl_filter__link " + (active === id ? "active" : "active2")
-          }
-          // style={style}
-          onClick={this.onFilterStyle}
-        >
-          {items}
-        </div>
-      );
+  //   const elements = arr.map((item) => {
+  //     const { id, items } = item;
+  //     // const style = {
+  //     //   color: show ? "rgb(76, 219, 107)" : "black",
+  //     //   borderBottom: show ? "solid 2px rgb(4, 97, 27)" : "none",
+  //     // };
+  //     console.log("inem id = " + id);
+  //     return (
+  //       <div
+  //         key={id}
+  //         id={id}
+  //         className={
+  //           "bl_filter__link " + (active === id ? "active" : "active2")
+  //         }
+  //         // style={style}
+  //         onClick={this.onFilterStyle}
+  //       >
+  //         {items}
+  //       </div>
+  //     );
+  //   });
+
+  //   return <div className="d-flex">{elements}</div>;
+  // };
+
+  onSelectItemSettings = () => {
+    this.username === this.state.username
+      ? this.props.history.push(`/settings/`)
+      : this.followUser();
+  };
+
+  followUser = async () => {
+    const url = `https://conduit.productionready.io/api/profiles/${this.user}/follow`;
+    const adapter = axios.create({
+      headers: {
+        authorization: "Token " + this.token,
+      },
     });
-
-    return <div className="d-flex">{elements}</div>;
+    await adapter.post(url, {});
+  };
+  onPushHistory = () => {
+    this.props.history.push("/");
   };
 
   onLoad = () => {
@@ -163,17 +172,19 @@ class UserEnter extends Component {
               <div className="d-flex justify-content-end">
                 <button
                   onClick={() => {
-                    this.props.history.push("/settings/");
+                    this.onSelectItemSettings();
                   }}
                   type="button"
                   className="btn btn-outline-secondary"
                 >
-                  edit profile
+                  {this.state.username === this.username
+                    ? "edit profile"
+                    : "follow profile"}
                 </button>
               </div>
             </div>
           </div>
-          {this.onLoadNavBar()}
+          {/* {this.onLoadNavBar()} */}
           <div className="d-flex">
             <div className="p-4">
               <div
@@ -204,13 +215,18 @@ class UserEnter extends Component {
       );
   };
 
-  onPushHistory() {
-    this.props.history.push("/");
-  }
-
   onLoadUserProfile = () => {
-    const { token } = this.state;
-    const content = <div>{token ? this.onLoad() : this.onPushHistory}</div>;
+    // const { token } = this.state;
+    const content = <div>{this.onLoad()}</div>;
+    // (
+    //   <div>
+    //     {token
+    //       ? this.onLoad()
+    //       : () => {
+    //           this.onPushHistory();
+    //         }}
+    //   </div>
+    // );
     return content;
   };
 
@@ -219,5 +235,5 @@ class UserEnter extends Component {
     return <div>{onLoadUserProfile}</div>;
   }
 }
-export default UserEnter;
-// export default withRouter(UserEnter);
+// export default UserEnter;
+export default withRouter(UserEnter);

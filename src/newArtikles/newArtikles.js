@@ -3,44 +3,86 @@ import Axios from "axios";
 
 class NewArtikles extends Component {
   postNewArticles = "https://conduit.productionready.io/api/articles/";
+  state = {};
 
-  // article: {
-  //   tagList: [],
-  //   title: "covid19covid19",
-  //    description: "covid19covid19",
-  //    body: "covid19 await covid21"}
+  componentDidMount() {
+    const token = localStorage.getItem("token");
 
-  get1 = `https://conduit.productionready.io/api/articles/covid19covid19-6yro11`;
+    this.setState({
+      token,
+    });
+    console.log(this.state.token);
+  }
 
-  //   article:{title: "covid19covid19"
-  //   slug: "covid19covid19-6yro11"
-  //   body: "covid19 await  covid21"
-  //   createdAt: "2020-04-06T20:07:31.467Z"
-  //   updatedAt: "2020-04-06T20:07:31.467Z"
-  //   tagList: []
-  //   description: "covid19covid19",
-  //   author: {username: "covid19covid19", bio: "2", image: "1", following: false},
-  //   favorited: false
-  // favoritesCount: 0
-  // }
-  getComments = `https://conduit.productionready.io/api/articles/covid19covid19-6yro11/comments`;
-  // comments:[]
+  // getProfileNexState = async () => {
+  //   const adapter = Axios.create({
+  //     headers: {
+  //       authorization: "Token " + this.state.token,
+  //     },
+  //   });
+
+  //   await adapter
+  //     .get(`${this.postNewArticles}${this.state.slugArticlesTitle}`)
+  //     .then((res) => {
+  //       const prof = res.data;
+  //       console.log(prof);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response);
+  //     });
+  // };
 
   createNewrticles = async () => {
-    await Axios.put(this.postNewArticles, {
-      article: {
-        tagList: [],
-        title: "covid19_2",
-        description: "covid19_2",
-        body: "covid19 await _2",
+    console.log(this.state.token);
+    const { title, description, body } = this.state;
+    const adapter = Axios.create({
+      headers: {
+        authorization: "Token " + this.state.token,
       },
-    })
+    });
+
+    await adapter
+      .post(this.postNewArticles, {
+        article: {
+          title: title,
+          description: description,
+          body: body,
+        },
+      })
       .then((res) => {
+        this.setState({
+          slugArticlesTitle: res.data.article.slug,
+        });
         console.log(res.data);
       })
+      .then(() =>
+        this.props.history.push(`/article/${this.state.slugArticlesTitle}/`)
+      )
+
       .catch((error) => {
         console.log(error.response);
       });
+  };
+
+  onPostArticlesTitle = (e) => {
+    const value = e.target.value;
+    this.setState({
+      title: value,
+    });
+  };
+
+  onPostArticlesBody = (e) => {
+    const value = e.target.value;
+    this.setState({
+      body: value,
+    });
+  };
+
+  onPostArticlesdescription = (e) => {
+    const value = e.target.value;
+    this.setState({
+      description: value,
+    });
   };
 
   newArticleRender() {
@@ -62,6 +104,7 @@ class NewArtikles extends Component {
                 formcontrolname="title"
                 placeholder="Article Title"
                 type="text"
+                onChange={this.onPostArticlesTitle}
               />
             </div>
             <div className="form-group">
@@ -70,6 +113,7 @@ class NewArtikles extends Component {
                 formcontrolname="description"
                 placeholder="What's this article about?"
                 type="text"
+                onChange={this.onPostArticlesdescription}
               />
             </div>
             <div className="form-group">
@@ -78,6 +122,7 @@ class NewArtikles extends Component {
                 formcontrolname="body"
                 placeholder="Write your article (in markdown)"
                 rows="8"
+                onChange={this.onPostArticlesBody}
               ></textarea>
             </div>
             <div className="form-group">

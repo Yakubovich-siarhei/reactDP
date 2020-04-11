@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 
+import { withRouter } from "react-router-dom";
+
 import { Link } from "react-router-dom";
 
 class HeaderUser extends Component {
+  username = localStorage.getItem("username");
+
+  onSelectAutor = () => {
+    this.props.history.push(`/profile/${this.username}`);
+  };
+
   render() {
     const home = (
       <li className="list-group-item bg-transparent border-0">
@@ -14,9 +22,14 @@ class HeaderUser extends Component {
 
     const profileUser = (
       <li className="list-group-item bg-transparent border-0">
-        <Link to="/profile/user/" className="text-light badge badge-dark">
-          user
-        </Link>
+        <span
+          className="text-light badge badge-dark"
+          onClick={() => {
+            this.onSelectAutor();
+          }}
+        >
+          {this.username}
+        </span>
       </li>
     );
 
@@ -39,9 +52,9 @@ class HeaderUser extends Component {
     const navPanelUser = (
       <ul className="list-group list-group-horizontal">
         {home}
-        {profileUser}
-        {profileUserSettings}
         {userNewArticles}
+        {profileUserSettings}
+        {profileUser}
       </ul>
     );
 
@@ -67,4 +80,4 @@ class HeaderUser extends Component {
   }
 }
 
-export default HeaderUser;
+export default withRouter(HeaderUser);

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import AllListTags from "../render-list/render-list";
-import AllFeedList from "../renderFeed/renderFeed";
-
-import TagClickRender from "../TagClickRender/TagClickRender";
+import AllListTags from "../allListTags/allListTags";
+import AllFeedList from "../allFeedList/allFeedList";
 
 export default class AllList extends Component {
   // service = new Service();
@@ -13,23 +11,24 @@ export default class AllList extends Component {
     isLoading: true,
     tagrender: false,
     isLoadingYouTag: false,
-    selectedItem: null
+    selectedItem: null,
   };
 
-  onSelectedItems = id => {
+  onSelectedItems = (id) => {
     this.setState({
       selectedItem: id,
       tagrender: true,
-      isLoading: false,
-      isLoadingYouTag: false
+      isLoading: true,
+      isLoadingYouTag: false,
     });
   };
 
   onLoadingYuorFeed = () => {
     this.setState({
+      selectedItem: null,
       isLoading: true,
       isLoadingYouTag: false,
-      tagrender: false
+      tagrender: false,
     });
   };
 
@@ -37,7 +36,7 @@ export default class AllList extends Component {
     this.setState({
       isLoading: false,
       tagrender: false,
-      isLoadingYouTag: true
+      isLoadingYouTag: true,
     });
   };
 
@@ -94,12 +93,11 @@ export default class AllList extends Component {
             {tagrender ? buttonTag : null}
           </nav>
         </div>
-        <div className="d-flex">
-          <div className="col-9">
-            {tagrender ? (
-              <TagClickRender selectedItem={this.state.selectedItem} />
+        <div className="d-flex col-12 flex-wrap">
+          <div className="col-9 ">
+            {isLoading ? (
+              <AllFeedList selectedItem={this.state.selectedItem} />
             ) : null}
-            {isLoading ? <AllFeedList /> : null}
             {isLoadingYouTag ? <h1>OOOOOOOOOOO</h1> : null}
           </div>
           <div className="col-3">

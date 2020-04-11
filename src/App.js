@@ -11,6 +11,7 @@ import Footer from "./footer/footer";
 import UserEnter from "./UserEnter/UserEnter";
 import Settings from "./settings/settings";
 import NewArtikles from "./newArtikles/newArtikles";
+import ItemArticles from "./itemArticles/itemArticles";
 
 export default class App extends Component {
   state = {
@@ -52,9 +53,10 @@ export default class App extends Component {
             <Route path="/" component={AllList} exact />
             <Route path="/login/" component={FormLogIn} exact />
             <Route path="/register/" render={() => formSign} exact />
-            <Route path="/profile/user/" component={UserEnter} exact />
+            <Route path="/profile/:user/" component={UserEnter} exact />
             <Route path="/settings/" component={Settings} exact />
             <Route path="/newarticles/" component={NewArtikles} exact />
+            <Route path="/article/:slug/" component={ItemArticles} exact />
 
             <Footer />
           </div>

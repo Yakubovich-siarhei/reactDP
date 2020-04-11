@@ -3,53 +3,39 @@ import Spinner from "../spinner/spinner";
 import axios from "axios";
 
 class Settings extends Component {
-  state = {
-    // username: null,
-    // email: null,
-    // image: null,
-  };
+  state = {};
 
   componentDidMount() {
     const email = localStorage.getItem("email");
     const username = localStorage.getItem("username");
-    const id = localStorage.getItem("id");
     const token = localStorage.getItem("token");
-    const createdAt = localStorage.getItem("createdAt");
-    const updatedAt = localStorage.getItem("updatedAt");
     const bio = localStorage.getItem("bio");
     const image = localStorage.getItem("image");
+    // const password = localStorage.getItem("password");
 
     this.setState({
       username,
       token,
       email,
-      id,
-      createdAt,
-      updatedAt,
       bio,
       image,
+      // password,
     });
   }
 
   handleFormSubmit = () => {
     const {
       username,
-      token,
       email,
-      id,
-      createdAt,
-      updatedAt,
       bio,
       image,
+      // password,
     } = this.state;
-    localStorage.setItem("token", token);
     localStorage.setItem("username", username);
     localStorage.setItem("email", email);
-    localStorage.setItem("id", id);
-    localStorage.setItem("createdAt", createdAt);
-    localStorage.setItem("updatedAt", updatedAt);
     localStorage.setItem("bio", bio);
     localStorage.setItem("image", image);
+    // localStorage.setItem("password", password);
   };
 
   onSettingChangeName = (e) => {
@@ -57,7 +43,13 @@ class Settings extends Component {
     this.setState({
       username: value,
     });
-    console.log("username = " + this.state.username);
+  };
+
+  onSettingChangePassword = (e) => {
+    const value = e.target.value;
+    this.setState({
+      password: value,
+    });
   };
 
   onSettingChangeEmail = (e) => {
@@ -65,7 +57,6 @@ class Settings extends Component {
     this.setState({
       email: value,
     });
-    console.log("email = " + this.state.email);
   };
 
   onSettingChangeImage = (e) => {
@@ -73,35 +64,51 @@ class Settings extends Component {
     this.setState({
       image: value,
     });
-    console.log("image = " + this.state.image);
+  };
+
+  onSettingChangeBio = (e) => {
+    const value = e.target.value;
+    this.setState({
+      bio: value,
+    });
   };
 
   onSettingSubmit = async () => {
-    await axios
+    const { username, token, email, bio, image, password } = this.state;
+    // if (!password) {
+    //   (res) => {
+    //     console.log(res);
+    //   };
+    // }
+    const adapter = axios.create({
+      headers: {
+        authorization: "Token " + token,
+      },
+    });
+
+    await adapter
       .put("https://conduit.productionready.io/api/user", {
         user: {
-          id: 91033,
-          email: "covid19covid19@m.r",
-          createdAt: "2020-04-01T11:26:28.313Z",
-          updatedAt: "2020-05-05T22:15:49.140Z",
-          username: "covid19covid19",
-          bio: null,
-          image:
-            "https://hubpng.com/public/uploads/preview/coronavirus-png-image-hd-covid-19-11583095191dm7kk82js9.png",
-          token:
-            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6OTEwMzMsInVzZXJuYW1lIjoiY292aWQxOWNvdmlkMTkiLCJleHAiOjE1OTEzMDg5NDl9.S6DZjVJYflqMp3oa-YFMOhChqZ2NsCwVo75BTCUUDJA",
-          password: "covid19covid19covid19covid19",
+          email: email,
+          username: username,
+          bio: bio,
+          image: image,
+          password: password,
         },
       })
+      .then((res) => {
+        console.log(res);
+      })
       .then(this.handleFormSubmit)
+      .then(() => this.props.history.push("/profile/user/"))
       .catch((error) => {
-        console.log(error);
+        console.log(error.response);
       });
   };
 
   renderFormSetting = () => {
     if (this.state.username) {
-      const { username, email } = this.state;
+      const { username, email, bio, image } = this.state;
 
       return (
         <div className="m-auto pt-4" style={{ width: "70%" }}>
@@ -120,6 +127,7 @@ class Settings extends Component {
                   className="form-control "
                   formcontrolname="image"
                   placeholder="URL of profile picture"
+                  defaultValue={image ? image : null}
                   type="text"
                   onChange={this.onSettingChangeImage}
                 />
@@ -138,7 +146,9 @@ class Settings extends Component {
                   className="form-control form-control-lg "
                   formcontrolname="bio"
                   placeholder="Short bio about you"
+                  defaultValue={bio ? bio : null}
                   rows="8"
+                  onChange={this.onSettingChangeBio}
                 ></textarea>
               </div>
               <div className="form-group">
@@ -156,6 +166,7 @@ class Settings extends Component {
                   formcontrolname="password"
                   placeholder="New Password"
                   type="password"
+                  onChange={this.onSettingChangePassword}
                 />
               </div>
               <div className="d-flex justify-content-between">

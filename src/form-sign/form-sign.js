@@ -4,8 +4,8 @@ import { withRouter } from "react-router";
 
 class FormSignIN extends Component {
   state = {
-    password: null,
-    name: null,
+    // password: null,
+    // name: null,
     selectedNavBar: false,
     errorMesage: {},
     errorMesageActive: false,
@@ -20,18 +20,18 @@ class FormSignIN extends Component {
       username,
       token,
       email,
-      id,
-      createdAt,
-      updatedAt,
+      // id,
+      // createdAt,
+      // updatedAt,
       bio,
       image,
     } = this.state;
     localStorage.setItem("token", token);
     localStorage.setItem("username", username);
     localStorage.setItem("email", email);
-    localStorage.setItem("id", id);
-    localStorage.setItem("createdAt", createdAt);
-    localStorage.setItem("updatedAt", updatedAt);
+    // localStorage.setItem("id", id);
+    // localStorage.setItem("createdAt", createdAt);
+    // localStorage.setItem("updatedAt", updatedAt);
     localStorage.setItem("bio", bio);
     localStorage.setItem("image", image);
   };
@@ -74,10 +74,10 @@ class FormSignIN extends Component {
       .then((res) => {
         const articles = res.data.user;
         this.setState({
-          id: articles.id,
+          // id: articles.id,
           email: articles.email,
-          createdAt: articles.createdAt,
-          updatedAt: articles.updatedAt,
+          // createdAt: articles.createdAt,
+          // updatedAt: articles.updatedAt,
           username: articles.username,
           bio: articles.bio,
           image: articles.image,
